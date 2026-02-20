@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 80">
+  <!-- Dynamic Background with Gradient -->
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#495E57;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2C3E37;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="300" height="80" rx="15" fill="url(#grad1)" />
+  
+  <!-- Stylized Lemon Icon -->
+  <circle cx="50" cy="40" r="25" fill="#F4CE14" />
+  <path d="M50 25 Q65 25 65 40 T50 55 T35 40 T50 25" fill="#F9E067" />
+  <path d="M68 28 L78 18" stroke="#F4CE14" stroke-width="3" stroke-linecap="round" />
+  <circle cx="80" cy="16" r="3" fill="#F4CE14" />
+
+  <!-- Text -->
+  <text x="90" y="50" font-family="'Trebuchet MS', sans-serif" font-weight="bold" font-size="32" fill="#FFFFFF" letter-spacing="1">LITTLE LEMON</text>
+  <text x="92" y="65" font-family="'Arial', sans-serif" font-size="10" fill="#F4CE14" letter-spacing="3">CHICAGO</text>
+</svg>
