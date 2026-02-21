@@ -5,9 +5,16 @@ import * as Yup from "yup";
 interface BookingFormProps {
   availableTimes: string[];
   dispatch: React.Dispatch<{ type: string; payload: string }>;
+  submitForm: (formData: Record<string, string | number>) => void;
 }
 
-const BookingForm = ({ availableTimes, dispatch }: BookingFormProps) => {
+const BookingForm = ({ availableTimes, dispatch, submitForm }: BookingFormProps) => {
+  const getLocalDate = () => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  };
+  const todayISO = getLocalDate();
+
   const formik = useFormik({
     initialValues: {
       date: "",
@@ -25,14 +32,26 @@ const BookingForm = ({ availableTimes, dispatch }: BookingFormProps) => {
       occasion: Yup.string().required("Occasion is required"),
     }),
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      submitForm(values);
     },
   });
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     formik.handleChange(e);
     dispatch({ type: 'UPDATE_TIMES', payload: e.target.value });
+    formik.setFieldValue("time", "");
   };
+
+  const filteredTimes = availableTimes.filter((time) => {
+    if (formik.values.date !== todayISO) return true;
+
+    const [hourStr, minStr] = time.split(":");
+    const timeInMinutes = parseInt(hourStr, 10) * 60 + parseInt(minStr, 10);
+    const now = new Date();
+    const nowInMinutes = now.getHours() * 60 + now.getMinutes();
+
+    return timeInMinutes >= nowInMinutes + 180;
+  });
 
   return (
     <Box bg="white" p={8} borderRadius="xl" boxShadow="lg" maxW="500px" mx="auto" mt={8}>
@@ -46,6 +65,7 @@ const BookingForm = ({ availableTimes, dispatch }: BookingFormProps) => {
               id="date"
               name="date"
               type="date"
+              min={todayISO}
               onChange={handleDateChange}
               onBlur={formik.handleBlur}
               value={formik.values.date}
@@ -73,10 +93,19 @@ const BookingForm = ({ availableTimes, dispatch }: BookingFormProps) => {
               _focus={{ borderColor: "blue.500", boxShadow: "0 0 0 1px blue.500" }}
             >
               <option value="" disabled>Select time</option>
-              {availableTimes.map((time) => (
-                <option key={time} value={time}>{time}</option>
-              ))}
+              {filteredTimes.length > 0 ? (
+                 filteredTimes.map((time) => (
+                  <option key={time} value={time}>{time}</option>
+                 ))
+              ) : (
+                 <option value="" disabled>No times available</option>
+              )}
             </Box>
+            {formik.values.date === todayISO && (
+              <Text fontSize="xs" color="gray.500" mt={1}>
+                * Note: Same-day bookings require at least 3 hours advance notice.
+              </Text>
+            )}
             {formik.errors.time && formik.touched.time && (
               <Text color="red.500" fontSize="sm" mt={1}>{formik.errors.time}</Text>
             )}

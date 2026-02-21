@@ -18,7 +18,7 @@ const Footer = () => {
 
         {/* Navigation Column */}
         <VStack align="flex-start" gap={4}>
-            <Text fontWeight="bold" color="#F4CE14">Doormat Navigation</Text>
+            <Text fontWeight="bold" color="#F4CE14">Navigation</Text>
             <RouterLink to="/">Home</RouterLink>
             <RouterLink to="/about">About</RouterLink>
             <RouterLink to="/menu">Menu</RouterLink>

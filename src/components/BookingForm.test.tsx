@@ -13,8 +13,12 @@ const renderWithChakra = (component: React.ReactNode) => {
 };
 
 describe("BookingForm", () => {
+  const mockAvailableTimes = ["17:00", "18:00", "19:00", "20:00", "21:00", "22:00"];
+  const mockDispatch = vi.fn();
+  const mockSubmitForm = vi.fn();
+
   it("renders all fields correctly", () => {
-    renderWithChakra(<BookingForm />);
+    renderWithChakra(<BookingForm availableTimes={mockAvailableTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
     
     expect(screen.getByLabelText(/choose date/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/choose time/i)).toBeInTheDocument();
@@ -24,7 +28,7 @@ describe("BookingForm", () => {
   });
 
   it("validates required fields", async () => {
-    renderWithChakra(<BookingForm />);
+    renderWithChakra(<BookingForm availableTimes={mockAvailableTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
     
     const submitButton = screen.getByText(/make your reservation/i);
     fireEvent.click(submitButton);
@@ -36,7 +40,7 @@ describe("BookingForm", () => {
   });
 
   it("validates guest number limits", async () => {
-    renderWithChakra(<BookingForm />);
+    renderWithChakra(<BookingForm availableTimes={mockAvailableTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
     
     const guestsInput = screen.getByLabelText(/number of guests/i);
     
@@ -58,10 +62,7 @@ describe("BookingForm", () => {
   });
 
   it("submits the form with valid data", async () => {
-     // Mock window.alert
-     const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
-     
-     renderWithChakra(<BookingForm />);
+     renderWithChakra(<BookingForm availableTimes={mockAvailableTimes} dispatch={mockDispatch} submitForm={mockSubmitForm} />);
 
      const dateInput = screen.getByLabelText(/choose date/i);
      const timeSelect = screen.getByLabelText(/choose time/i); // Note: might need specific selector for select
@@ -69,7 +70,7 @@ describe("BookingForm", () => {
      const occasionSelect = screen.getByLabelText(/occasion/i);
      const submitButton = screen.getByText(/make your reservation/i);
 
-     fireEvent.change(dateInput, { target: { value: "2023-10-10" } });
+     fireEvent.change(dateInput, { target: { value: "2030-10-10" } });
      fireEvent.change(timeSelect, { target: { value: "18:00" } });
      fireEvent.change(guestsInput, { target: { value: "4" } });
      fireEvent.change(occasionSelect, { target: { value: "Birthday" } });
@@ -77,9 +78,7 @@ describe("BookingForm", () => {
      fireEvent.click(submitButton);
 
      await waitFor(() => {
-         expect(alertMock).toHaveBeenCalled();
+         expect(mockSubmitForm).toHaveBeenCalled();
      });
-     
-     alertMock.mockRestore();
   });
 });
