@@ -6,9 +6,10 @@ interface BookingFormProps {
   availableTimes: string[];
   dispatch: React.Dispatch<{ type: string; payload: string }>;
   submitForm: (formData: Record<string, string | number>) => void;
+  isSubmitting?: boolean;
 }
 
-const BookingForm = ({ availableTimes, dispatch, submitForm }: BookingFormProps) => {
+const BookingForm = ({ availableTimes, dispatch, submitForm, isSubmitting = false }: BookingFormProps) => {
   const getLocalDate = () => {
     const now = new Date();
     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -153,7 +154,16 @@ const BookingForm = ({ availableTimes, dispatch, submitForm }: BookingFormProps)
             )}
           </Box>
 
-          <Button type="submit" bg="#F4CE14" width="full" mt={4} _hover={{ bg: "#E4BE13" }} color="black">
+          <Button 
+            type="submit" 
+            bg="#F4CE14" 
+            width="full" 
+            mt={4} 
+            _hover={{ bg: "#E4BE13" }} 
+            color="black"
+            isLoading={isSubmitting}
+            loadingText="Processing..."
+          >
             Make Your reservation
           </Button>
         </VStack>

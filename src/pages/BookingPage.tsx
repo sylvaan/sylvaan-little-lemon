@@ -1,8 +1,9 @@
-
 import { Box } from "@chakra-ui/react";
+import { toaster } from "../components/ui/toaster";
 import { Helmet } from "react-helmet-async";
 import BookingForm from "../components/BookingForm";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 interface BookingPageProps {
   availableTimes: string[];
@@ -11,19 +12,42 @@ interface BookingPageProps {
 
 const BookingPage = ({ availableTimes, dispatch }: BookingPageProps) => {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submitForm = (formData: Record<string, string | number>) => {
-    // Check if API is available and mock submission
+  const submitForm = async (formData: Record<string, string | number>) => {
+    setIsSubmitting(true);
+    
+    // Simulate network delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     if (typeof window !== "undefined" && typeof window.submitAPI === "function") {
       const isSuccess = window.submitAPI(formData);
+      setIsSubmitting(false);
+
       if (isSuccess) {
+        toaster.create({
+          title: "Reservation successful.",
+          description: "Your table has been booked.",
+          type: "success",
+          duration: 5000,
+        });
         navigate("/confirmed");
       } else {
-          alert("Booking failed. Please try again.");
+        toaster.create({
+          title: "Booking failed.",
+          description: "We couldn't process your reservation. Please try again.",
+          type: "error",
+          duration: 5000,
+        });
       }
     } else {
-       // Fallback for environment without API script loaded
-       alert("Simulated submit success.");
+       setIsSubmitting(false);
+       toaster.create({
+          title: "Simulated Success.",
+          description: "API not found, but simulating success flow.",
+          type: "info",
+          duration: 3000,
+       });
        navigate("/confirmed");
     }
   };
@@ -34,7 +58,7 @@ const BookingPage = ({ availableTimes, dispatch }: BookingPageProps) => {
         <title>Little Lemon - Reservations</title>
         <meta name="description" content="Book a table at Little Lemon. Choose your date, time, and occasion." />
       </Helmet>
-      <BookingForm availableTimes={availableTimes} dispatch={dispatch} submitForm={submitForm} />
+      <BookingForm availableTimes={availableTimes} dispatch={dispatch} submitForm={submitForm} isSubmitting={isSubmitting} />
     </Box>
   );
 };

@@ -1,73 +1,72 @@
-# React + TypeScript + Vite
+# Little Lemon Web Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository contains the front-end web application for **Little Lemon**, a fictional family-owned Mediterranean restaurant focused on traditional recipes served with a modern twist.
 
-Currently, two official plugins are available:
+This project was built as the capstone assignment for the **Meta Front-End Developer Professional Certificate** on Coursera.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Project Features
 
-## React Compiler
+This Minimum Viable Product (MVP) specifically implements the following requirements:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Responsive Landing Page:** A modern, accessible home page that adapts to both mobile and desktop screens.
+- **Table Booking System (End-to-End):** A complete reservation flow allowing users to pick a date, time, number of guests, and occasion.
+- **Robust Form Validation:** Built using Formik and Yup to ensure user inputs are valid (e.g., preventing past dates, enforcing minimum advance booking times).
+- **State Management:** Utilizing React's `useReducer` (wrapped in a custom hook `useBookingTimes`) to manage the complex state of available booking times dynamically based on the selected date.
+- **API Integration:** Interacts with a simulated backend API script to fetch available times and submit the booking data.
+- **A11y (Accessibility):** Developed with semantic HTML and appropriate ARIA labels for screen readers.
+- **Comprehensive Unit Testing:** Uses Vitest and React Testing Library to validate the reducer functions, form behaviors, and HTML5 validation integration.
 
-## Expanding the ESLint configuration
+## Technologies Used
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Framework:** React 18, Vite
+- **Language:** TypeScript
+- **Styling & UI:** Chakra UI (v3), vanilla CSS
+- **Routing:** React Router DOM (v7)
+- **Form Handling:** Formik, Yup
+- **State Management:** React Hooks (`useState`, `useReducer`, Custom Hooks)
+- **Testing:** Vitest, React Testing Library, jsdom
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting Started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+To run this project locally on your machine, follow these steps:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+You must have [Node.js](https://nodejs.org/) installed (v16 or higher is recommended).
+
+### Installation
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/sylvaan/sylvaan-little-lemon.git
+   ```
+2. Navigate into the project directory:
+   ```bash
+   cd sylvaan-little-lemon
+   ```
+3. Install the dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running the App
+
+To start the local development server:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open [http://localhost:5173](http://localhost:5173/) to view it in the browser.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Running Tests
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To run the Vitest test suite and ensure all components and reducers are working correctly:
+
+```bash
+npm run test
 ```
+
+## Project Demo
+
+The home page features a Hero section, Highlights/Specials, Testimonials, and an About component. The core functional requirement lies within the **Reservations** page, which allows real-time selection of available dining slots.
